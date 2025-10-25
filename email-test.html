@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laravel Documents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+
+    <section>
+      <div class="container-fluid py-3">
+        <div class="row">
+          <div class="col-12">
+
+            <textarea rows="22" cols="100" class="form-control">
+      
+MAIL_MAILER=smtp
+MAIL_HOST=smtppro.zoho.com
+MAIL_PORT=465
+MAIL_USERNAME=anchor@kloud.com.bd
+MAIL_PASSWORD=PASSWORD
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS="anchor@kloud.com.bd"
+MAIL_FROM_NAME="${APP_NAME}"
+
+use Illuminate\Support\Facades\Mail;
+Route::get('/test-email', function () {
+    try {
+        Mail::raw('Test Email Body.', function ($message) {
+            $message->to('arman.alawaf@gmail.com')->subject('Test Email Subject');
+        });
+        return '✅ Mail sent successfully!';
+    } catch (\Exception $e) {
+        return '❌ Error: ' . $e->getMessage();
+    }
+});
+
+
+-----------------------------------------------------------------------------------------------------
+
+
+use Illuminate\Support\Facades\Mail;
+
+    public function sendPackageEmail(Request $request){
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+        ]);
+        $data = $request->only([
+            'name', 
+            'phone', 
+            'email', 
+        ]);
+        try {
+            Mail::raw(
+                "📦 New Package Order Received\n\n" .
+                "Dear Team,\n\n" .
+                "A new customer has submitted a package order. Please find the details below:\n\n" .
+                "Full Name: {$data['name']}\n" .
+                "Phone Number: {$data['phone']}\n" .
+                "Email Address: {$data['email']}\n"
+                ,
+                function ($message) {
+                    $message->to([
+                        'arman.alawaf@gmail.com',
+                        'arman.alawaf@gmail.com',
+                    ])
+                     ->subject('New Order Notification');
+                }
+            );
+            Mail::raw(
+                "Dear {$data['name']},\n\n" .
+                "Thank you for choosing our service!\n\n",
+                function ($message) use ($data) {
+                    $message->to($data['email'])
+                            ->subject('Order Confirmation');
+                }
+            );
+            return redirect('/')->with('success', '✅ Email sent successfully!');
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => '❌ Mail error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+            </textarea>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>
