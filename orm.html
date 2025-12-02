@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laravel Documents</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+
+    <section>
+      <div class="container-fluid py-3">
+        <div class="row">
+          <div class="col-12">
+
+            <textarea rows="22" cols="100" class="form-control">
+class Kam extends Model
+{
+    use HasFactory;
+    public function customers(){
+        return $this->hasMany(Customer::class);
+    }
+}
+class Customer extends Model
+{
+    use HasFactory;
+    public function kam(){
+        return $this->belongsTo(Kam::class);
+    }
+}
+    public function up(): void
+    {
+        Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->foreignId('kam_id')->nullable()->constrained('kams')->onDelete('set null');
+            $table->timestamps();
+        });
+    }
+    public function up(): void
+    {
+        Schema::create('kams', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
+            $table->timestamps();
+        });
+    }
+    @if($data->kam_id){{$data->kam->name}}@endif
+            </textarea>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>
